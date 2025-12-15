@@ -8,13 +8,34 @@ try {
   heroVideo = null;
 }
 
+
 const Hero = () => {
   const videoRef = useRef(null);
+  const heroSectionRef = useRef(null);
   const [showText, setShowText] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isMuted, setIsMuted] = useState(true); // start muted for autoplay compatibility
   const [isPlaying, setIsPlaying] = useState(false);
+  // Mute video when hero section is out of view
+  useEffect(() => {
+    const heroSection = heroSectionRef.current;
+    const video = videoRef.current;
+    if (!heroSection || !video) return;
+
+    const observer = new window.IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          // Mute the video when hero is out of view
+          video.muted = true;
+          setIsMuted(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(heroSection);
+    return () => observer.disconnect();
+  }, [isVideoLoaded]);
 
   // Enhanced mobile detection
   useEffect(() => {
@@ -94,6 +115,7 @@ const Hero = () => {
 
   return (
     <div
+      ref={heroSectionRef}
       className="w-full"
       style={{ fontFamily: "Montserrat, sans-serif", fontWeight: "800" }}
     >
