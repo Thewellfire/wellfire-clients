@@ -41,10 +41,11 @@ app.use(cors({
         "http://localhost:5176",
         "http://localhost:5180",
         "http://localhost:3000",
-        process.env.FRONTEND_URL || "https://www.thewellfire.com/",
+        process.env.FRONTEND_URL || "https://www.thewellfire.com",
         process.env.ADMIN_URL || "https://wellfire-new2.onrender.com",
         "https://wellfire-frontend-oa5j.onrender.com",
-        "https://wellfire-new2.onrender.com"
+        "https://wellfire-new2.onrender.com",
+        "https://wellfire-clients-frontend.onrender.com"
     ],
     credentials: true
 }));
