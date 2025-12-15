@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Admin API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        .error {
+            color: red;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .success {
+            color: green;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .product {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Admin Panel API Test</h1>
+
+        <div>
+            <h2>Step 1: Login</h2>
+            <button onclick="testLogin()">Test Admin Login</button>
+            <div id="loginResult"></div>
+        </div>
+
+        <div>
+            <h2>Step 2: Fetch Products</h2>
+            <button onclick="fetchProducts()">Fetch Products (No Auth)</button>
+            <button onclick="fetchProductsWithAuth()">Fetch Products (With Auth)</button>
+            <div id="productsResult"></div>
+        </div>
+
+        <div>
+            <h2>Current Token:</h2>
+            <pre id="currentToken">No token yet</pre>
+        </div>
+    </div>
+
+    <script>
+        let adminToken = localStorage.getItem('adminTestToken') || '';
+        const backendUrl = 'http://localhost:4000';
+
+        if (adminToken) {
+            document.getElementById('currentToken').textContent = adminToken;
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('loginResult');
+            try {
+                resultDiv.innerHTML = '<div class="success">Logging in...</div>';
+
+                const response = await fetch(`${backendUrl}/api/user/admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'admin@example.com',
+                        password: 'greatstack123'
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Login response:', data);
+
+                if (data.success) {
+                    adminToken = data.token;
+                    localStorage.setItem('adminTestToken', adminToken);
+                    document.getElementById('currentToken').textContent = adminToken;
+                    resultDiv.innerHTML = '<div class="success">✅ Login successful! Token saved.</div>';
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ Login failed: ${data.message}</div>`;
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function fetchProducts() {
+            const resultDiv = document.getElementById('productsResult');
+            try {
+                resultDiv.innerHTML = '<div class="success">Fetching products...</div>';
+
+                const response = await fetch(`${backendUrl}/api/investment-product/list?page=1&limit=500`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+                console.log('Products response (no auth):', data);
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">✅ Fetched ${data.products?.length || 0} products without auth</div>
+                        <div>Total Products: ${data.pagination?.totalProducts || data.products?.length || 0}</div>
+                        ${data.products?.map(p => `
+                            <div class="product">
+                                <strong>${p.productTitle}</strong> - ${p.category}
+                                <br>Budget: ${p.totalBudget}, Status: ${p.fundingStatus}
+                            </div>
+                        `).join('') || '<div class="error">No products found</div>'}
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ Failed: ${data.message}</div>`;
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function fetchProductsWithAuth() {
+            const resultDiv = document.getElementById('productsResult');
+            
+            if (!adminToken) {
+                resultDiv.innerHTML = '<div class="error">❌ Please login first!</div>';
+                return;
+            }
+
+            try {
+                resultDiv.innerHTML = '<div class="success">Fetching products with auth...</div>';
+                
+                const response = await fetch(`${backendUrl}/api/investment-product/list?page=1&limit=500`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': adminToken
+                    }
+                });
+
+                const data = await response.json();
+                console.log('Products response (with auth):', data);
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">✅ Fetched ${data.products?.length || 0} products with auth</div>
+                        <div>Total Products: ${data.pagination?.totalProducts || data.products?.length || 0}</div>
+                        ${data.products?.map(p => `
+                            <div class="product">
+                                <strong>${p.productTitle}</strong> - ${p.category}
+                                <br>Budget: ${p.totalBudget}, Status: ${p.fundingStatus}
+                            </div>
+                        `).join('') || '<div class="error">No products found</div>'}
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ Failed: ${data.message}</div>`;
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        // Auto-test on load
+        window.onload = () => {
+            console.log('Backend URL:', backendUrl);
+            console.log('Stored token:', adminToken);
+        };
+    </script>
+</body>
+
+</html>

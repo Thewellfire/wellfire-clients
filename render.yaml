@@ -1,0 +1,73 @@
+services:
+  # Backend Service
+  - type: web
+    name: wellfire-backend
+    runtime: node
+    repo: https://github.com/kapildev1012/wellfire.new2
+    branch: main
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: MONGODB_URI
+        value: mongodb+srv://infowellfire_db_user:rNwxIkbEVmQo6U4n@wellfire.6ybxjdk.mongodb.net/
+      - key: JWT_SECRET
+        value: wellfire_secret_key_2024_secure_token_generation
+      - key: ADMIN_EMAIL
+        value: admin@example.com
+      - key: ADMIN_PASSWORD
+        value: greatstack123
+      - key: CLOUDINARY_NAME
+        value: dyguccrfj
+      - key: CLOUDINARY_API_KEY
+        value: "191375351829356"
+      - key: CLOUDINARY_SECRET_KEY
+        value: MZlI0jKh-A-Q4U0sCINbpUCmj8M
+      - key: EMAIL_USER
+        value: info.wellfire@gmail.com
+      - key: EMAIL_PASSWORD
+        value: scti vynl tcev uoim0zzz
+      - key: GOOGLE_CLIENT_ID
+        value: 157300060933-jvifsion0fq80tdi9ph8r9jkhnogcqm2.apps.googleusercontent.com
+      - key: FRONTEND_URL
+        value: https://wellfire-frontend-oa5j.onrender.com
+      - key: ADMIN_URL
+        value: https://wellfire-new2.onrender.com
+      - key: STRIPE_SECRET_KEY
+        value: your_stripe_secret_here
+      - key: RAZORPAY_KEY_SECRET
+        value: your_razorpay_secret_here
+      - key: RAZORPAY_KEY_ID
+        value: your_razorpay_key_id_here
+
+  # Frontend Service
+  - type: web
+    name: wellfire-frontend
+    runtime: static
+    repo: https://github.com/kapildev1012/wellfire.new2
+    branch: main
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: VITE_BACKEND_URL
+        value: https://wellfire-backend-5eww.onrender.com
+
+  # Admin Service
+  - type: web
+    name: wellfire-admin
+    runtime: static
+    repo: https://github.com/kapildev1012/wellfire.new2
+    branch: main
+    rootDir: admin 
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: VITE_BACKEND_URL
+        value: https://wellfire-backend-5eww.onrender.com

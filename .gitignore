@@ -1,0 +1,51 @@
+# Environment variables
+.env
+.env.local
+.env.production
+backend/.env
+frontend/.env
+admin /.env
+
+# Large video files - excluded from git to avoid LFS issues
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# Allow this specific hero video (compressed) to be tracked
+!frontend/src/assets/hero.mp4
+
+# Upload directories
+backend/uploads/
+
+# Build directories
+*/dist/
+frontend/dist/
+admin/dist/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules
+node_modules/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
