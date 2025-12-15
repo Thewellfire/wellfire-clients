@@ -17,15 +17,26 @@ const Hero = () => {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isMuted, setIsMuted] = useState(true); // start muted for autoplay compatibility
   const [isPlaying, setIsPlaying] = useState(false);
-  // Mute video when hero section is out of view
+  // Auto play audio when hero is in view, mute when out of view
   useEffect(() => {
     const heroSection = heroSectionRef.current;
     const video = videoRef.current;
     if (!heroSection || !video) return;
 
     const observer = new window.IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) {
+      async ([entry]) => {
+        if (entry.isIntersecting) {
+          // Unmute and play the video when hero is in view
+          video.muted = false;
+          setIsMuted(false);
+          try {
+            await video.play();
+            setIsPlaying(true);
+          } catch (err) {
+            // Autoplay with sound may be blocked by browser
+            console.warn('Autoplay with sound failed:', err);
+          }
+        } else {
           // Mute the video when hero is out of view
           video.muted = true;
           setIsMuted(true);
