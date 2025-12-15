@@ -78,7 +78,7 @@ const Footer = () => {
         { /* Social Icons */ } <
         div className = "flex gap-3 pt-2" >
         <
-        a href = "https://www.instagram.com/thewellfiremedianetwork?igsh=MW5uYTFqamN0bG1tcw==&utm_source=qr"
+        a href = "https://www.instagram.com/wellfire_studios?igsh=OGltdXN0ajcyNTE2"
         target = "_blank"
         rel = "noopener noreferrer"
         className = "w-6 h-6 flex items-center justify-center text-white/70 hover:text-white transition-all duration-300 hover:scale-110" >

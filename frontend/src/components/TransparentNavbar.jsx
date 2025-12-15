@@ -58,7 +58,7 @@ const TransparentNavbar = () => {
     { to: "/contact", label: "Contact Us" },
     {
       type: "social",
-      instagram: "https://www.instagram.com/thewellfiremedianetwork?igsh=MW5uYTFqamN0bG1tcw==&utm_source=qr",
+      instagram: "https://www.instagram.com/wellfire_studios?igsh=OGltdXN0ajcyNTE2",
       youtube: "https://www.youtube.com/@TheWellfirestudios",
       linkedin: "https://www.linkedin.com/company/wellfire-studios/"
     },
