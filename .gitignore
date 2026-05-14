@@ -1,10 +1,13 @@
-# Environment variables
+# Environment variables - ignore ALL .env files everywhere
 .env
-.env.local
-.env.production
-backend/.env
-frontend/.env
-admin /.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Render config contains secrets - use Render dashboard instead
+render.yaml
 
 # Large video files - excluded from git to avoid LFS issues
 *.mp4
