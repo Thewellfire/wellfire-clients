@@ -22,7 +22,6 @@ const defaultPort = process.env.PORT || 4000;
 let port = defaultPort; // Will be updated with available port
 
 // Connect to database and cloud services
-connectDB();
 connectCloudinary();
 
 // Performance Middlewares - Order matters!
@@ -161,7 +160,9 @@ let server;
 
 const startServer = async() => {
     try {
-        // Get an available port (will auto-kill existing process or find alternative)
+    await connectDB();
+
+    // Get an available port (will auto-kill existing process or find alternative)
         port = await getPort(defaultPort, {
             autoKill: true, // Automatically kill process on the port if in use
             autoFind: true, // Find alternative port if killing fails
