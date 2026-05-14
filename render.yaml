@@ -12,7 +12,9 @@ services:
       - key: NODE_VERSION
         value: 18.17.0
       - key: MONGODB_URI
-        value: mongodb+srv://infowellfire_db_user:rNwxIkbEVmQo6U4n@wellfire.6ybxjdk.mongodb.net/
+        value: mongodb+srv://infowellfire_db_user:rNwxIkbEVmQo6U4n@wellfire.6ybxjdk.mongodb.net/e-commerce?retryWrites=true&w=majority
+      - key: MONGODB_URI_FALLBACK
+        value: mongodb://infowellfire_db_user:rNwxIkbEVmQo6U4n@wellfire.6ybxjdk.mongodb.net:27017/e-commerce?ssl=true&authSource=admin
       - key: JWT_SECRET
         value: wellfire_secret_key_2024_secure_token_generation
       - key: ADMIN_EMAIL
